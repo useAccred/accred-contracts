@@ -1,0 +1,15 @@
+{
+  "name": "credit-terminal-contracts",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "compile": "node test/compile.mjs",
+    "test": "pnpm run compile && node test/run.mjs",
+    "prepare:artifacts": "node scripts/prepare-artifacts.mjs"
+  },
+  "dependencies": {
+    "ethers": "^6.15.0",
+    "ganache": "7.9.2",
+    "solc": "0.8.37"
+  }
+}

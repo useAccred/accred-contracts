@@ -1,0 +1,39 @@
+{
+  "targetNetwork": "Robinhood Chain Mainnet",
+  "deploymentEnabled": false,
+  "broadcastEnabled": false,
+  "rpcUrl": null,
+  "localTestChainId": 31337,
+  "compiler": {
+    "solcVersion": "0.8.37",
+    "evmVersion": "paris",
+    "optimizerEnabled": true,
+    "optimizerRuns": 200
+  },
+  "artifactPreparationCommand": "pnpm run prepare:artifacts",
+  "contracts": [
+    "LLMCredit",
+    "LLMCreditVault",
+    "TreasuryCreditPurchase",
+    "CashbackClaimVault",
+    "SolanaCreditSettlement",
+    "LLMCreditRedeemer"
+  ],
+  "proposedSetupOnly": {
+    "vaultGateway": "Pass the backend API operator address as LLMCreditVault.initialGateway; it must match the operator configured by the backend.",
+    "creditRedeemAddress": "Set CREDIT_REDEEM_ADDRESS to the authorized LLMCreditRedeemer address only after separately approved deployment; no address is configured here.",
+    "requiredRoleGrants": [
+      "LLMCredit.setBurner(LLMCreditVault, true)",
+      "LLMCredit.setBurner(LLMCreditRedeemer, true)",
+      "LLMCredit.setMinter(TreasuryCreditPurchase, true)",
+      "LLMCredit.setMinter(SolanaCreditSettlement, true)"
+    ],
+    "signerConfiguration": "Use dedicated EIP-712 quote/cashback signers and a payment verifier that attests only finalized Solana payments; do not expose arbitrary minting endpoints.",
+    "cashbackFunding": "Owner must explicitly fund CashbackClaimVault in USDG before it can pay claims.",
+    "redemptionFunding": "Owner must explicitly fund LLMCreditRedeemer with six-decimal USDG. Payout quotes use USDG base units.",
+    "creditUnits": "LLMCreditVault and redemption amounts use 18-decimal LLMCredit base units. Convert API microcredits by multiplying by 1e12.",
+    "vaultSeparation": "Redeemer only transfers wallet-held credits; user must separately withdraw unused, unreserved API vault credits before redeeming.",
+    "execution": "Proposals only; no contracts deployed, CREDIT_REDEEM_ADDRESS configured, or role grants or transactions executed."
+  },
+  "note": "Preparation only. This manifest has no deployment addresses, RPC endpoint, private key, or transaction broadcasting configuration. Verify official Robinhood Chain Mainnet network details and independently audit bytecode before any separately authorized deployment."
+}
